@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">uduX</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navbar_text_connect">Connect</string>
+    <string name="navbar_text_search">Search</string>
+    <string name="navbar_text_discover">Discover</string>
+    <string name="navbar_text_video">Video</string>
+    <string name="navbar_text_myudux">My Udux</string>
+</resources>
