@@ -5,45 +5,45 @@ import com.google.gson.annotations.SerializedName
 
 data class Item(
     @SerializedName("albumId")
-    val albumId: String,
+    val albumId: String?,
     @SerializedName("albumName")
-    val albumName: String,
+    val albumName: String?,
     @SerializedName("artist_ids")
-    val artistIds: List<String>,
+    val artistIds: List<String>?,
     @SerializedName("created")
-    val created: Long,
+    val created: Long?,
     @SerializedName("description")
-    val description: Any,
+    val description: Any?,
     @SerializedName("endDate")
-    val endDate: Long,
+    val endDate: Long?,
     @SerializedName("files")
-    val files: List<File>,
+    val files: List<File>?,
     @SerializedName("id")
-    val id: String,
+    val id: String?,
     @SerializedName("isLivestream")
-    val isLivestream: Boolean,
+    val isLivestream: Boolean?,
     @SerializedName("modified")
-    val modified: Long,
+    val modified: Long?,
     @SerializedName("name")
-    val name: String,
+    val name: String?,
     @SerializedName("perms")
-    val perms: List<String>,
+    val perms: List<String>?,
     @SerializedName("pictures")
-    val pictures: Pictures,
+    val pictures: Pictures?,
     @SerializedName("price")
-    val price: Int,
+    val price: Int?,
     @SerializedName("priceId")
-    val priceId: String,
+    val priceId: String?,
     @SerializedName("relatedAlbum")
-    val relatedAlbum: String,
+    val relatedAlbum: String?,
     @SerializedName("releasedate")
-    val releasedate: Long,
+    val releasedate: Long?,
     @SerializedName("sharelink")
-    val sharelink: String,
+    val sharelink: String?,
     @SerializedName("startDate")
-    val startDate: Long,
+    val startDate: Long?,
     @SerializedName("status")
-    val status: String,
+    val status: String?,
     @SerializedName("uri")
-    val uri: String
+    val uri: String?
 )

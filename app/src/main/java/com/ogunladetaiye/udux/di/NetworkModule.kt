@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -35,36 +34,35 @@ object NetworkModule {
     @Provides
     fun provideRetrofitInstance(): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(provideHttpClient())
-                .addConverterFactory(provideConverterFactory())
-                .build()
+            .baseUrl(BASE_URL)
+            .client(provideHttpClient())
+            .addConverterFactory(provideConverterFactory())
+            .build()
     }
 
     @Provides
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-                .readTimeout(15, TimeUnit.SECONDS)
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }).addInterceptor(buildAuthorizationInterceptor()).build()
+            .readTimeout(20, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }).addInterceptor(buildAuthorizationInterceptor()).build()
     }
 
     @Provides
     fun buildAuthorizationInterceptor() = object : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
-            val new = originalRequest.newBuilder().addHeader(HEADER_KEY,API_KEY).build()
+            val new = originalRequest.newBuilder().addHeader(HEADER_KEY, API_KEY).build()
             return chain.proceed(new)
         }
     }
 
 
-
     @Singleton
     @Provides
     fun provideDummyApiService(retrofit: Retrofit): UduxApi {
-        return  retrofit.create(UduxApi::class.java)
+        return retrofit.create(UduxApi::class.java)
     }
 }

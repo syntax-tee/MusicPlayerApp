@@ -3,39 +3,39 @@ package com.ogunladetaiye.udux.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class UduxModelItem(
+data class DiscoverApiResponseItem(
     @SerializedName("android")
-    val android: String,
+    val android: String?,
     @SerializedName("created")
-    val created: Long,
+    val created: Long?,
     @SerializedName("displayLimit")
-    val displayLimit: Int,
+    val displayLimit: Int?,
     @SerializedName("id")
-    val id: String,
+    val id: String?,
     @SerializedName("ios")
-    val ios: String,
+    val ios: String?,
     @SerializedName("items")
-    val items: List<Item>,
+    val items: List<Item>?,
     @SerializedName("modified")
-    val modified: Long,
+    val modified: Long?,
     @SerializedName("name")
-    val name: String,
+    val name: String?,
     @SerializedName("q")
-    val q: List<Any>,
+    val q: List<Any>?,
     @SerializedName("sectionIndex")
-    val sectionIndex: Int,
+    val sectionIndex: Int?,
     @SerializedName("status")
-    val status: String,
+    val status: String?,
     @SerializedName("streams")
-    val streams: String,
+    val streams: String?,
     @SerializedName("target")
-    val target: String,
+    val target: String?,
     @SerializedName("title")
-    val title: String,
+    val title: String?,
     @SerializedName("type")
-    val type: String,
+    val type: String?,
     @SerializedName("undefined")
-    val undefined: Undefined,
+    val undefined: Undefined?,
     @SerializedName("web")
-    val web: String
+    val web: String?
 )
