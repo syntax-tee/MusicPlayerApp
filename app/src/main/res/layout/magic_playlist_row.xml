@@ -6,7 +6,7 @@
         android:id="@+id/artwork"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:contentDescription="@string/Artwork"
         android:src="@drawable/artist_o" />
     <View
