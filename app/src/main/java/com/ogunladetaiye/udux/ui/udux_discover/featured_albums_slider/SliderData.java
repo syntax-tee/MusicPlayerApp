@@ -1,4 +1,4 @@
-package com.ogunladetaiye.udux.ui.udux_discover.slider;
+package com.ogunladetaiye.udux.ui.udux_discover.featured_albums_slider;
 
 public class SliderData {
 

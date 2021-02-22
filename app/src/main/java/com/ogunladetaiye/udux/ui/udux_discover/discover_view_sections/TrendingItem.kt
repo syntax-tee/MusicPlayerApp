@@ -1,4 +1,4 @@
-package com.ogunladetaiye.udux.ui.udux_discover.groupie
+package com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections
 
 import com.ogunladetaiye.udux.R
 import com.ogunladetaiye.udux.data.cache.entities.TrendingEntity

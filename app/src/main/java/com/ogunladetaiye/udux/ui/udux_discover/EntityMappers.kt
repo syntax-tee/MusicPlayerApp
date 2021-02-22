@@ -4,10 +4,10 @@ import com.ogunladetaiye.udux.data.cache.entities.MagicPlaylistEntity
 import com.ogunladetaiye.udux.data.cache.entities.NewMusicEntity
 import com.ogunladetaiye.udux.data.cache.entities.PlaylistEntity
 import com.ogunladetaiye.udux.data.cache.entities.TrendingEntity
-import com.ogunladetaiye.udux.ui.udux_discover.groupie.MagicPlaylistItem
-import com.ogunladetaiye.udux.ui.udux_discover.groupie.NewMusicItem
-import com.ogunladetaiye.udux.ui.udux_discover.groupie.PlaylistItem
-import com.ogunladetaiye.udux.ui.udux_discover.groupie.TrendingItem
+import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.MagicPlaylistItem
+import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.NewMusicItem
+import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.PlaylistItem
+import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.TrendingItem
 
 fun List<MagicPlaylistEntity>.toMagicPlaylistItem():List<MagicPlaylistItem>{
     return this.map {
