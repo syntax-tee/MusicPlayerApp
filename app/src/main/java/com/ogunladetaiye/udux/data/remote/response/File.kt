@@ -5,25 +5,25 @@ import com.google.gson.annotations.SerializedName
 
 data class File(
     @SerializedName("created_time")
-    val createdTime: String?,
-    @SerializedName("fps")
-    val fps: Int?,
+    val createdTime: String,
     @SerializedName("height")
-    val height: Int?,
+    val height: Int,
     @SerializedName("link")
-    val link: String?,
+    val link: String,
     @SerializedName("md5")
-    val md5: String?,
+    val md5: String,
     @SerializedName("public_name")
-    val publicName: String?,
+    val publicName: String,
     @SerializedName("quality")
-    val quality: String?,
+    val quality: String,
     @SerializedName("size")
-    val size: Int?,
+    val size: Int,
     @SerializedName("size_short")
-    val sizeShort: String?,
+    val sizeShort: String,
     @SerializedName("type")
-    val type: String?,
+    val type: String,
     @SerializedName("width")
-    val width: Int?
+    val width: Int,
+    @SerializedName("source")
+    val source: Int
 )

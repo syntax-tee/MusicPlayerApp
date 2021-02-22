@@ -1,51 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/featured_release_image"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:scaleType="fitXY"
-            android:src="@drawable/artist_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/artist_image"/>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/featured_release_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="30dp"
+            android:layout_gravity="bottom"
             android:gravity="bottom"
             android:textStyle="italic"
             android:text="New EP"
-            android:fontFamily="@font/proxima_nova"
+            android:fontFamily="@font/montserrat_regular"
             android:textColor="@color/white"
-            android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:textSize="12sp"/>
         <TextView
-            android:id="@+id/artist_name"
+            android:id="@+id/featured_release_artist_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:gravity="bottom"
+            android:layout_gravity="bottom"
             android:layout_marginBottom="10dp"
             android:text="MR EASY"
-            android:textStyle="bold"
+            android:fontFamily="@font/montserrat_extrabold"
             android:layout_marginStart="20dp"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="-185dp" />
+            android:textColor="@color/white"/>
     </FrameLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

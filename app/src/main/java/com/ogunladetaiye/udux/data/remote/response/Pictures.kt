@@ -5,15 +5,15 @@ import com.google.gson.annotations.SerializedName
 
 data class Pictures(
     @SerializedName("active")
-    val active: Boolean?,
+    val active: Boolean,
     @SerializedName("default_picture")
-    val defaultPicture: Boolean?,
+    val defaultPicture: Boolean,
     @SerializedName("resource_key")
-    val resourceKey: String?,
+    val resourceKey: String,
     @SerializedName("sizes")
-    val sizes: List<Size>?,
+    val sizes: List<Size>,
     @SerializedName("type")
-    val type: String?,
+    val type: String,
     @SerializedName("uri")
-    val uri: String?
+    val uri: String
 )

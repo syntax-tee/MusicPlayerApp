@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="detail_views_margin">16dp</dimen>
-    <dimen name="new_release_top_margin">24</dimen>
+    <dimen name="new_release_top_margin">24dp</dimen>
 </resources>

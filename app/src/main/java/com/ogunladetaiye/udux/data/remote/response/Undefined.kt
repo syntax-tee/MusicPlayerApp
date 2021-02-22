@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Undefined(
     @SerializedName("_nanoseconds")
-    val nanoseconds: Int?,
+    val nanoseconds: Int,
     @SerializedName("_seconds")
-    val seconds: Int?
+    val seconds: Int
 )

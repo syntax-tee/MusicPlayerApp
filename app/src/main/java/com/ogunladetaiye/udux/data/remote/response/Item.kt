@@ -5,45 +5,48 @@ import com.google.gson.annotations.SerializedName
 
 data class Item(
     @SerializedName("albumId")
-    val albumId: String?,
+    val albumId: String,
     @SerializedName("albumName")
-    val albumName: String?,
-    @SerializedName("artist_ids")
-    val artistIds: List<String>?,
+    val albumName: String,
     @SerializedName("created")
-    val created: Long?,
+    val created: Long,
     @SerializedName("description")
     val description: Any?,
-    @SerializedName("endDate")
-    val endDate: Long?,
     @SerializedName("files")
-    val files: List<File>?,
+    val files: List<File>,
     @SerializedName("id")
-    val id: String?,
-    @SerializedName("isLivestream")
-    val isLivestream: Boolean?,
+    val id: String,
     @SerializedName("modified")
-    val modified: Long?,
+    val modified: Long,
     @SerializedName("name")
-    val name: String?,
+    val name: String,
     @SerializedName("perms")
-    val perms: List<String>?,
+    val perms: List<String>,
     @SerializedName("pictures")
-    val pictures: Pictures?,
-    @SerializedName("price")
-    val price: Int?,
-    @SerializedName("priceId")
-    val priceId: String?,
-    @SerializedName("relatedAlbum")
-    val relatedAlbum: String?,
+    val pictures: Pictures,
     @SerializedName("releasedate")
-    val releasedate: Long?,
+    val releasedate: Long,
     @SerializedName("sharelink")
-    val sharelink: String?,
-    @SerializedName("startDate")
-    val startDate: Long?,
+    val sharelink: String,
     @SerializedName("status")
-    val status: String?,
+    val status: String,
     @SerializedName("uri")
-    val uri: String?
+    val uri: String,
+    @SerializedName("hex")
+    val hex: String,
+    @SerializedName("artwork")
+    val artwork: String,
+    @SerializedName("mobile_artwork")
+    val mobileArtwork: String,
+    @SerializedName("title")
+    val title: String,
+    @SerializedName("subtitle")
+    val subtitle: String,
+    @SerializedName("artist_name")
+    val artistName: String,
+    @SerializedName("source")
+    val source: String
+
+
+
 )
