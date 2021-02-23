@@ -118,11 +118,6 @@ class DiscoverFragment : Fragment() {
         })
     }
 
-//    fun displayPlaylist() {
-//        discoverViewModel.fetchPlaylist().observe(viewLifecycleOwner, Observer {
-//            initPlaylist(it.toPlaylistItem())
-//        })
-//    }
 
     private fun initMagicPlaylist(magicPlaylist: List<MagicPlaylistItem>) {
         val mAdapter = GroupAdapter<ViewHolder>().apply {
@@ -157,17 +152,6 @@ class DiscoverFragment : Fragment() {
             adapter = mAdapter
         }
     }
-
-//    fun initPlaylist(playlistItem: List<PlaylistItem>) {
-//        val mAdapter = GroupAdapter<ViewHolder>().apply {
-//            addAll(playlistItem)
-//        }
-//        playlistRecyclerview.apply {
-//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-//            setHasFixedSize(true)
-//            adapter = mAdapter
-//        }
-//    }
 
     private fun displayPlaylist() {
         setupRecyclerView()
