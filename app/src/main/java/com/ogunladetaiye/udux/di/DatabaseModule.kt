@@ -2,7 +2,11 @@ package com.ogunladetaiye.udux.di
 
 import android.content.Context
 import androidx.room.Room
+import com.ogunladetaiye.udux.data.cache.CacheRepository
+import com.ogunladetaiye.udux.data.cache.DiscoveryRepository
+import com.ogunladetaiye.udux.data.cache.UduxDao
 import com.ogunladetaiye.udux.data.cache.UduxDatabase
+import com.ogunladetaiye.udux.data.remote.UduxApi
 import com.ogunladetaiye.udux.utils.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -30,6 +34,13 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideDao(database: UduxDatabase) = database.uduxDao()
+
+
+    @Singleton
+    @Provides
+    fun provideDiscoveryRepository(
+        dao: UduxDao,
+    ) = CacheRepository(dao) as DiscoveryRepository
 
 
 }

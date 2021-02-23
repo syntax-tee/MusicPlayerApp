@@ -113,7 +113,7 @@ class DiscoverFragment : Fragment() {
     }
 
     fun displayNewMusic() {
-        discoverViewModel.fetchNewMusic().observe(viewLifecycleOwner, Observer {
+        discoverViewModel.fetchNewMusicFromApi().observe(viewLifecycleOwner, Observer {
             initNewMusic(it.toNewMusicItem())
         })
     }

@@ -1,32 +1,49 @@
 package com.ogunladetaiye.udux.data.cache
 
+import androidx.lifecycle.LiveData
 import com.ogunladetaiye.udux.data.cache.entities.*
 import javax.inject.Inject
 
-class CacheRepository @Inject constructor(private val udxDao: UduxDao) {
+class CacheRepository @Inject constructor(private val udxDao: UduxDao):DiscoveryRepository {
 
-    fun saveFeaturedAlbums(featuredAlbumEntity: FeaturedAlbumEntity) =
+    override suspend fun saveFeaturedAlbums(featuredAlbumEntity: FeaturedAlbumEntity) {
         udxDao.saveFeaturedAlbumEntity(featuredAlbumEntity)
+    }
 
-    fun saveMagicPlaylist(playlistEntity: MagicPlaylistEntity) =
+    override suspend fun saveMagicPlaylist(playlistEntity: MagicPlaylistEntity) {
         udxDao.saveMagicPlaylistEntity(playlistEntity)
+    }
 
-    fun saveTrendingMusic(trendingEntity: TrendingEntity) =
+    override suspend fun saveTrendingMusic(trendingEntity: TrendingEntity) {
         udxDao.saveTrendingEntity(trendingEntity)
+    }
 
-    fun savePlaylist(playlistEntity: PlaylistEntity) = udxDao.savePlaylistEntity(playlistEntity)
+    override suspend fun savePlaylist(playlistEntity: PlaylistEntity) {
+        udxDao.savePlaylistEntity(playlistEntity)
+    }
 
-    fun saveNeMusic(newMusicEntity: NewMusicEntity) = udxDao.saveNewMusicEntity(newMusicEntity)
+    override suspend fun saveNeMusic(newMusicEntity: NewMusicEntity) {
+        udxDao.saveNewMusicEntity(newMusicEntity)
+    }
 
-    fun fetchMagicPlaylist() = udxDao.fetchMagicPlaylistEntity()
+    override  fun fetchMagicPlaylist(): LiveData<List<MagicPlaylistEntity>> {
+       return udxDao.fetchMagicPlaylistEntity()
+    }
 
-    fun fetchFeatureAlbums() = udxDao.fetchFeatureAlbumEntity()
+    override fun fetchFeatureAlbums(): LiveData<List<FeaturedAlbumEntity>> {
+      return  udxDao.fetchFeatureAlbumEntity()
+    }
 
-    fun fetchTrendingMusic() = udxDao.fetchTrendingEntity()
+    override fun fetchTrendingMusic(): LiveData<List<TrendingEntity>> {
+        return udxDao.fetchTrendingEntity()
+    }
 
-    fun fetchNewMusic() = udxDao.fetchNewMusicEntity()
+    override fun fetchNewMusic(): LiveData<List<NewMusicEntity>> {
+       return udxDao.fetchNewMusicEntity()
+    }
 
-    fun fetchPlaylist() = udxDao.fetchPlaylistEntity()
-
+    override fun fetchPlaylist(): LiveData<List<PlaylistEntity>> {
+       return udxDao.fetchPlaylistEntity()
+    }
 
 }
