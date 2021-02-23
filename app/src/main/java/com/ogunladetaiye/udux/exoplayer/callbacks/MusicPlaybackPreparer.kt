@@ -1,5 +1,4 @@
-package com.ogunladetaiye.udux.exoplayer.callbacks
-
+package com.plcoding.spotifycloneyt.exoplayer.callbacks
 
 import android.net.Uri
 import android.os.Bundle
@@ -33,7 +32,7 @@ class MusicPlaybackPreparer(
 
     override fun onPrepareFromMediaId(mediaId: String, playWhenReady: Boolean, extras: Bundle?) {
         firebaseMusicSource.whenReady {
-            val itemToPlay = firebaseMusicSource.playlists.find { mediaId == it.description.mediaId }
+            val itemToPlay = firebaseMusicSource.songs.find { mediaId == it.description.mediaId }
             playerPrepared(itemToPlay)
         }
     }
@@ -42,3 +41,18 @@ class MusicPlaybackPreparer(
 
     override fun onPrepareFromUri(uri: Uri, playWhenReady: Boolean, extras: Bundle?) = Unit
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

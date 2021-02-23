@@ -23,14 +23,14 @@
             <include
                 layout="@layout/slider_layout"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="250dp" />
 
             <ProgressBar
                 android:id="@+id/progress_bar"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:visibility="@{viewmodel.showProgressBar}" />
+                android:layout_gravity="center_horizontal|center_vertical" />
 
             <include
                 layout="@layout/magic_playlist_recyclerview"
@@ -83,7 +83,7 @@
                 android:textColor="@color/white" />
 
             <include
-                layout="@layout/playlist_layout_recyclerview"
+                layout="@layout/songlist_layout_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

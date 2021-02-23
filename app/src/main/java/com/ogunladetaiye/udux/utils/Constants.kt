@@ -6,7 +6,7 @@ object Constants {
     const val HEADER_KEY = "x-api-key"
     const val DATABASE_NAME = "udx_table"
     const val UTILITIES = "utilities"
-    const val PLAYLIST_COLLECTION = "playlists"
+    const val SONG_COLLECTION = "songs"
 
     const val MEDIA_ROOT_ID = "root_id"
     const val NETWORK_ERROR = "NETWORK_ERROR"
