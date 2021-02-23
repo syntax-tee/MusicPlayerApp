@@ -16,15 +16,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+
     @Singleton
     @Provides
     fun provideDatabase(
-            @ApplicationContext context: Context
+        @ApplicationContext context: Context
     ) = Room.databaseBuilder(
-            context,
-            UduxDatabase::class.java,
-            DATABASE_NAME
-    ).build()
+        context,
+        UduxDatabase::class.java,
+        DATABASE_NAME
+    ).allowMainThreadQueries().fallbackToDestructiveMigration().build()
 
     @Singleton
     @Provides

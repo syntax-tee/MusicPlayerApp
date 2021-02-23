@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName
 data class File(
     @SerializedName("created_time")
     val createdTime: String,
-    @SerializedName("fps")
-    val fps: Int,
     @SerializedName("height")
     val height: Int,
     @SerializedName("link")
@@ -25,5 +23,7 @@ data class File(
     @SerializedName("type")
     val type: String,
     @SerializedName("width")
-    val width: Int
+    val width: Int,
+    @SerializedName("source")
+    val source: Int
 )

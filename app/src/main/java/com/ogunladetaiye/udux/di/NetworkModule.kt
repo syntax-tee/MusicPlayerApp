@@ -8,7 +8,6 @@ import com.ogunladetaiye.udux.utils.Constants.HEADER_KEY
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.internal.managers.ApplicationComponentManager
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -18,7 +17,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
 
 
 @Module
@@ -35,36 +33,35 @@ object NetworkModule {
     @Provides
     fun provideRetrofitInstance(): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(provideHttpClient())
-                .addConverterFactory(provideConverterFactory())
-                .build()
+            .baseUrl(BASE_URL)
+            .client(provideHttpClient())
+            .addConverterFactory(provideConverterFactory())
+            .build()
     }
 
     @Provides
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-                .readTimeout(15, TimeUnit.SECONDS)
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }).addInterceptor(buildAuthorizationInterceptor()).build()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }).addInterceptor(buildAuthorizationInterceptor()).build()
     }
 
     @Provides
     fun buildAuthorizationInterceptor() = object : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
-            val new = originalRequest.newBuilder().addHeader(HEADER_KEY,API_KEY).build()
+            val new = originalRequest.newBuilder().addHeader(HEADER_KEY, API_KEY).build()
             return chain.proceed(new)
         }
     }
 
 
-
     @Singleton
     @Provides
     fun provideDummyApiService(retrofit: Retrofit): UduxApi {
-        return  retrofit.create(UduxApi::class.java)
+        return retrofit.create(UduxApi::class.java)
     }
 }

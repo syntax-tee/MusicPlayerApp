@@ -6,4 +6,11 @@
     <string name="navbar_text_discover">Discover</string>
     <string name="navbar_text_video">Video</string>
     <string name="navbar_text_myudux">My Udux</string>
+    <string name="Artwork">Image</string>
+    <string name="text_albums">Albums</string>
+    <string name="text_new_music">New Music</string>
+    <string name="text_trending">Trending</string>
+    <string name="text_playlist">Playlists</string>
+    <string name="notification_channel_name">Music Channel</string>
+    <string name="notification_channel_description">Shows the currently playing music</string>
 </resources>

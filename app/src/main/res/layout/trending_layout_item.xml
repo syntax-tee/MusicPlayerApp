@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="trendingEntity"
+            type="com.ogunladetaiye.udux.data.cache.entities.TrendingEntity" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:layout_margin="10dp"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/trending_image"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadViewImage="@{trendingEntity.artwork}"
+            tools:srcCompat="@tools:sample/avatars" />
+
+
+        <TextView
+            android:id="@+id/trending_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@{trendingEntity.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/trending_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:fontFamily="@font/montserrat_thin"
+            android:text="@{trendingEntity.artistName}"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+
+    </FrameLayout>
+</layout>

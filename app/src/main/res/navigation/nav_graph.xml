@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_connect" />
     <fragment
         android:id="@+id/discoverFragment"
-        android:name="com.ogunladetaiye.udux.ui.udux_discover.DiscoverFragment"
+        android:name="com.ogunladetaiye.udux.ui.udux_discover.fragments.DiscoverFragment"
         android:label="@string/navbar_text_discover"
         tools:layout="@layout/fragment_discover" />
     <fragment

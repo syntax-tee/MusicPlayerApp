@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="magicplaylist"
+            type="com.ogunladetaiye.udux.data.cache.entities.MagicPlaylistEntity" />
+
+    </data>
+
+    <FrameLayout
+    android:background="@drawable/round_background"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/playlist_image"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:scaleType="fitXY"
+            app:loadViewImage="@{magicplaylist.artwork}"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <View
+            android:id="@+id/playlist_overlay"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            app:magicPlaylistHoverBackground="@{magicplaylist}"
+            android:alpha="0.6"/>
+
+
+        <TextView
+            android:id="@+id/playlist_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_extrabold"
+            android:layout_gravity="center"
+            android:text="@{magicplaylist.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            android:maxLines="1"
+            android:textStyle="bold"/>
+    </FrameLayout>
+</layout>

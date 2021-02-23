@@ -3,7 +3,7 @@ package com.ogunladetaiye.udux.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class UduxModelItem(
+data class DiscoverApiResponseItem(
     @SerializedName("android")
     val android: String,
     @SerializedName("created")
@@ -37,5 +37,7 @@ data class UduxModelItem(
     @SerializedName("undefined")
     val undefined: Undefined,
     @SerializedName("web")
-    val web: String
+    val web: String,
+    @SerializedName("source")
+    val source: String
 )
