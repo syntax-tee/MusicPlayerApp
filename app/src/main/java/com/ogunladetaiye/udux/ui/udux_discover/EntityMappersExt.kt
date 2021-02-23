@@ -24,9 +24,3 @@ fun List<NewMusicEntity>.toNewMusicItem():List<NewMusicItem>{
         NewMusicItem(it)
     }
 }
-
-//fun List<PlaylistEntity>.toPlaylistItem():List<PlaylistItem>{
-//    return this.map {
-//        PlaylistItem(it)
-//    }
-//}
