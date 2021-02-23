@@ -1,4 +1,4 @@
-package com.ogunladetaiye.udux.ui.udux_discover
+package com.ogunladetaiye.udux.ui.udux_discover.viewmodels
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -42,10 +42,11 @@ class DiscoverViewModel @ViewModelInject constructor(
             saveNewMusic(discoverApiResponse)
             savePlaylist()
         }
-
+        _showProgressBar.value = false
     }
 
     fun saveMagicPlaylist(discoverApiResponseItem: DiscoverApiResponse) {
+        _showProgressBar.value = true
         viewModelScope.launch {
             val magicPlaylist = async { discoverApiResponseItem.get(1) }
             val playlistItems = magicPlaylist.await()
@@ -64,6 +65,8 @@ class DiscoverViewModel @ViewModelInject constructor(
     }
 
     fun saveFeaturedAlbums(discoverApiResponseItem: DiscoverApiResponse) {
+        _showProgressBar.value = true
+
         viewModelScope.launch {
             val featuredAlbum = async { discoverApiResponseItem.get(0) }
             val featuredAlbumItems = featuredAlbum.await()
@@ -82,6 +85,8 @@ class DiscoverViewModel @ViewModelInject constructor(
     }
 
     fun saveTrending(discoverApiResponseItem: DiscoverApiResponse) {
+        _showProgressBar.value = true
+
         viewModelScope.launch {
             val trendingMusic = async { discoverApiResponseItem.get(2) }
             val trendingItems = trendingMusic.await()
@@ -100,6 +105,7 @@ class DiscoverViewModel @ViewModelInject constructor(
 
 
     fun saveNewMusic(discoverApiResponseItem: DiscoverApiResponse) {
+        _showProgressBar.value = true
         viewModelScope.launch {
             val newMusic = async { discoverApiResponseItem.get(3) }
             val newMusicItems = newMusic.await()
@@ -139,9 +145,6 @@ class DiscoverViewModel @ViewModelInject constructor(
 
         }
     }
-
-
-
 
     fun fetchFeaturedAlbums(): LiveData<List<FeaturedAlbumEntity>> {
         return cacheRepository.fetchFeatureAlbums()

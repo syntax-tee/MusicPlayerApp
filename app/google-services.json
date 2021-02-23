@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "455510699058",
+    "project_id": "udxmusicapp",
+    "storage_bucket": "udxmusicapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455510699058:android:a12875ae130e78ec61202b",
+        "android_client_info": {
+          "package_name": "com.ogunladetaiye.udux"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455510699058-kbl1hih6b2r51ln6stignlo8v3uhqdrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8aJoTCU_wOcwcstoCqYQQh-mToNYWSNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455510699058-kbl1hih6b2r51ln6stignlo8v3uhqdrp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

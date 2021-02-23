@@ -1,20 +1,27 @@
-package com.ogunladetaiye.udux.ui.udux_discover
+package com.ogunladetaiye.udux.ui.udux_discover.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ogunladetaiye.udux.R
+import com.ogunladetaiye.udux.exoplayer.callbacks.Status
+import com.ogunladetaiye.udux.ui.udux_discover.adapters.PlaylistAdapter
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.MagicPlaylistItem
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.NewMusicItem
-import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.PlaylistItem
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.TrendingItem
 import com.ogunladetaiye.udux.ui.udux_discover.featured_albums_slider.SliderAdapter
 import com.ogunladetaiye.udux.ui.udux_discover.featured_albums_slider.SliderData
+import com.ogunladetaiye.udux.ui.udux_discover.toMagicPlaylistItem
+import com.ogunladetaiye.udux.ui.udux_discover.toNewMusicItem
+import com.ogunladetaiye.udux.ui.udux_discover.toTrendingListItem
+import com.ogunladetaiye.udux.ui.udux_discover.viewmodels.DiscoverViewModel
+import com.ogunladetaiye.udux.ui.udux_discover.viewmodels.PlaylistViewModel
 import com.smarteist.autoimageslider.SliderView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -26,6 +33,7 @@ import kotlinx.android.synthetic.main.trending_layout_recyclerview.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -33,9 +41,13 @@ class DiscoverFragment : Fragment() {
 
     private val discoverViewModel: DiscoverViewModel by viewModels()
     val sliderDataArrayList: ArrayList<SliderData> = ArrayList()
-    lateinit var  sliderView: SliderView
+    lateinit var sliderView: SliderView
     lateinit var sliderAdapter: SliderAdapter
 
+    @Inject
+    lateinit var playlistAdapter: PlaylistAdapter
+
+    private val playlistViewModel: PlaylistViewModel by viewModels()
     val img1 =
         "https://static.udux.com/6ed790b59c902ae4c765b295d16f26fbaaaf26cca16ed9a087066c8328b86ca8.jpg"
     val img2 =
@@ -58,7 +70,7 @@ class DiscoverFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        GlobalScope.launch(Dispatchers.Main){
+        GlobalScope.launch(Dispatchers.Main) {
             discoverViewModel.discoveryServiceApi()
             displayMagicPlaylist()
             displayTrendingMusic()
@@ -70,13 +82,13 @@ class DiscoverFragment : Fragment() {
     fun displayFeatureSlider(sliderView: SliderView) {
         discoverViewModel.fetchFeaturedAlbums().observe(viewLifecycleOwner, {
             it.forEach {
-             //   sliderDataArrayList.add(SliderData(it.mobileArtwork, it.title, it.subtitle))
+                //   sliderDataArrayList.add(SliderData(it.mobileArtwork, it.title, it.subtitle))
             }
         })
 
-        sliderDataArrayList.add(SliderData(img1,"Olamide","Badoo"))
-        sliderDataArrayList.add(SliderData(img1,"Davido","A Good Time"))
-        sliderDataArrayList.add(SliderData(img1,"Wizkid","Made in Lagos"))
+        sliderDataArrayList.add(SliderData(img1, "Olamide", "Badoo"))
+        sliderDataArrayList.add(SliderData(img1, "Davido", "A Good Time"))
+        sliderDataArrayList.add(SliderData(img1, "Wizkid", "Made in Lagos"))
 
 
         sliderAdapter = SliderAdapter(requireActivity(), sliderDataArrayList)
@@ -94,23 +106,23 @@ class DiscoverFragment : Fragment() {
         })
     }
 
-    fun displayTrendingMusic(){
+    fun displayTrendingMusic() {
         discoverViewModel.fetchTrendingMusic().observe(viewLifecycleOwner, Observer {
             initTrendingMusic(it.toTrendingListItem())
         })
     }
 
-    fun displayNewMusic(){
+    fun displayNewMusic() {
         discoverViewModel.fetchNewMusic().observe(viewLifecycleOwner, Observer {
             initNewMusic(it.toNewMusicItem())
         })
     }
 
-    fun displayPlaylist(){
-        discoverViewModel.fetchPlaylist().observe(viewLifecycleOwner, Observer {
-            initPlaylist(it.toPlaylistItem())
-        })
-    }
+//    fun displayPlaylist() {
+//        discoverViewModel.fetchPlaylist().observe(viewLifecycleOwner, Observer {
+//            initPlaylist(it.toPlaylistItem())
+//        })
+//    }
 
     private fun initMagicPlaylist(magicPlaylist: List<MagicPlaylistItem>) {
         val mAdapter = GroupAdapter<ViewHolder>().apply {
@@ -123,7 +135,7 @@ class DiscoverFragment : Fragment() {
         }
     }
 
-    fun initTrendingMusic(trendingItem:List<TrendingItem>){
+    fun initTrendingMusic(trendingItem: List<TrendingItem>) {
         val mAdapter = GroupAdapter<ViewHolder>().apply {
             addAll(trendingItem)
         }
@@ -135,7 +147,7 @@ class DiscoverFragment : Fragment() {
     }
 
 
-    fun initNewMusic(newMusicItem:List<NewMusicItem>){
+    fun initNewMusic(newMusicItem: List<NewMusicItem>) {
         val mAdapter = GroupAdapter<ViewHolder>().apply {
             addAll(newMusicItem)
         }
@@ -146,17 +158,45 @@ class DiscoverFragment : Fragment() {
         }
     }
 
-    fun initPlaylist(playlistItem:List<PlaylistItem>){
-        val mAdapter = GroupAdapter<ViewHolder>().apply {
-            addAll(playlistItem)
-        }
-        playlistRecyclerview.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            setHasFixedSize(true)
-            adapter = mAdapter
+//    fun initPlaylist(playlistItem: List<PlaylistItem>) {
+//        val mAdapter = GroupAdapter<ViewHolder>().apply {
+//            addAll(playlistItem)
+//        }
+//        playlistRecyclerview.apply {
+//            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//            setHasFixedSize(true)
+//            adapter = mAdapter
+//        }
+//    }
+
+    private fun displayPlaylist() {
+        setupRecyclerView()
+        subscribeToObservers()
+        playlistAdapter.setItemClickListener {
+            playlistViewModel.playOrToggleSong(it)
         }
     }
 
+
+    private fun setupRecyclerView() = playlistRecyclerview.apply {
+        adapter = playlistAdapter
+        layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun subscribeToObservers() {
+        playlistViewModel.mediaItems.observe(viewLifecycleOwner) { result ->
+            when (result.status) {
+                Status.SUCCESS -> {
+                    allSongsProgressBar.isVisible = false
+                    result.data?.let { playlist ->
+                        playlistAdapter.playlists = playlist
+                    }
+                }
+                Status.ERROR -> Unit
+                Status.LOADING -> allSongsProgressBar.isVisible = true
+            }
+        }
+    }
 
 
 }

@@ -2,7 +2,6 @@ package com.ogunladetaiye.udux.di
 
 import android.content.Context
 import androidx.room.Room
-import com.ogunladetaiye.udux.data.cache.UduxDao
 import com.ogunladetaiye.udux.data.cache.UduxDatabase
 import com.ogunladetaiye.udux.utils.Constants.DATABASE_NAME
 import dagger.Module

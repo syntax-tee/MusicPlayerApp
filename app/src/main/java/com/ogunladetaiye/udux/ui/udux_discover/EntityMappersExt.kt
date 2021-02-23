@@ -2,11 +2,9 @@ package com.ogunladetaiye.udux.ui.udux_discover
 
 import com.ogunladetaiye.udux.data.cache.entities.MagicPlaylistEntity
 import com.ogunladetaiye.udux.data.cache.entities.NewMusicEntity
-import com.ogunladetaiye.udux.data.cache.entities.PlaylistEntity
 import com.ogunladetaiye.udux.data.cache.entities.TrendingEntity
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.MagicPlaylistItem
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.NewMusicItem
-import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.PlaylistItem
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.TrendingItem
 
 fun List<MagicPlaylistEntity>.toMagicPlaylistItem():List<MagicPlaylistItem>{
@@ -27,8 +25,8 @@ fun List<NewMusicEntity>.toNewMusicItem():List<NewMusicItem>{
     }
 }
 
-fun List<PlaylistEntity>.toPlaylistItem():List<PlaylistItem>{
-    return this.map {
-        PlaylistItem(it)
-    }
-}
+//fun List<PlaylistEntity>.toPlaylistItem():List<PlaylistItem>{
+//    return this.map {
+//        PlaylistItem(it)
+//    }
+//}
