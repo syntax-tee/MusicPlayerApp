@@ -1,6 +1,6 @@
 # uduX
 
-Udux Assignment
+Udux
 
 
 ![Screenshot2](https://user-images.githubusercontent.com/49109632/108923811-c37e9b80-7639-11eb-9786-40e9b6253a85.jpeg)
