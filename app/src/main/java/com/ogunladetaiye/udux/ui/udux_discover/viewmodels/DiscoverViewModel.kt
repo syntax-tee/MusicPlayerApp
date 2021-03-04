@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ogunladetaiye.udux.data.cache.CacheRepository
+import com.ogunladetaiye.udux.data.cache.DiscoveryRepository
 import com.ogunladetaiye.udux.data.cache.entities.*
 import com.ogunladetaiye.udux.data.remote.UduxApi
 import com.ogunladetaiye.udux.data.remote.models.FeaturedAlbum
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class DiscoverViewModel @ViewModelInject constructor(
     private val uduxApi: UduxApi,
-    private val cacheRepository: CacheRepository
+    private val discoveryRepository: DiscoveryRepository
 ) : ViewModel() {
 
     private val _udxModelItem = MutableLiveData<List<DiscoverApiResponseItem>>()
@@ -32,26 +32,30 @@ class DiscoverViewModel @ViewModelInject constructor(
     val showProgressBar = _showProgressBar
 
 
+    init {
+        _showProgressBar.postValue(true)
+    }
+
     fun discoveryServiceApi() {
         viewModelScope.launch {
             _showProgressBar.value = true
             val discoverApiResponse = uduxApi.discoverMusic()
-            saveFeaturedAlbums(discoverApiResponse)
-            saveMagicPlaylist(discoverApiResponse)
-            saveTrending(discoverApiResponse)
-            saveNewMusic(discoverApiResponse)
+            fetchFeaturedAlbumFromApi(discoverApiResponse)
+            fetchMagicPlaylistFromApi(discoverApiResponse)
+            fetchTrendingMusicFromApi(discoverApiResponse)
+            fetchNewMusicFromApi(discoverApiResponse)
             savePlaylist()
+            _showProgressBar.value = false
         }
-        _showProgressBar.value = false
     }
 
-    fun saveMagicPlaylist(discoverApiResponseItem: DiscoverApiResponse) {
+    fun fetchMagicPlaylistFromApi(discoverApiResponseItem: DiscoverApiResponse) {
         _showProgressBar.value = true
         viewModelScope.launch {
             val magicPlaylist = async { discoverApiResponseItem.get(1) }
             val playlistItems = magicPlaylist.await()
             for (playlist in playlistItems.items) {
-                cacheRepository.saveMagicPlaylist(
+                saveMagicPlaylist(
                     MagicPlaylistEntity(
                         0,
                         playlist.name,
@@ -64,14 +68,14 @@ class DiscoverViewModel @ViewModelInject constructor(
         }
     }
 
-    fun saveFeaturedAlbums(discoverApiResponseItem: DiscoverApiResponse) {
+    fun fetchFeaturedAlbumFromApi(discoverApiResponseItem: DiscoverApiResponse) {
         _showProgressBar.value = true
 
         viewModelScope.launch {
             val featuredAlbum = async { discoverApiResponseItem.get(0) }
             val featuredAlbumItems = featuredAlbum.await()
             for (featureAlbumItem in featuredAlbumItems.items) {
-                cacheRepository.saveFeaturedAlbums(
+                fetchFeaturedAlbumFromApi(
                     FeaturedAlbumEntity(
                         0,
                         featureAlbumItem.subtitle,
@@ -80,18 +84,20 @@ class DiscoverViewModel @ViewModelInject constructor(
                     )
                 )
 
+
             }
         }
     }
 
-    fun saveTrending(discoverApiResponseItem: DiscoverApiResponse) {
+
+    fun fetchTrendingMusicFromApi(discoverApiResponseItem: DiscoverApiResponse) {
         _showProgressBar.value = true
 
         viewModelScope.launch {
             val trendingMusic = async { discoverApiResponseItem.get(2) }
             val trendingItems = trendingMusic.await()
             for (trendingSong in trendingItems.items) {
-                cacheRepository.saveTrendingMusic(
+                saveTrendingMusic(
                     TrendingEntity(
                         0,
                         trendingSong.name,
@@ -103,14 +109,29 @@ class DiscoverViewModel @ViewModelInject constructor(
         }
     }
 
+    suspend fun saveTrendingMusic(trendingEntity: TrendingEntity) {
+        discoveryRepository.saveTrendingMusic(trendingEntity)
+    }
 
-    fun saveNewMusic(discoverApiResponseItem: DiscoverApiResponse) {
+    suspend fun saveMagicPlaylist(magicPlaylistEntity: MagicPlaylistEntity) {
+        discoveryRepository.saveMagicPlaylist(magicPlaylistEntity)
+    }
+
+    suspend fun fetchFeaturedAlbumFromApi(featuredAlbumEntity: FeaturedAlbumEntity) {
+        discoveryRepository.saveFeaturedAlbums(featuredAlbumEntity)
+    }
+
+    suspend fun saveNewMusic(newMusicEntity: NewMusicEntity) {
+        discoveryRepository.saveNeMusic(newMusicEntity)
+    }
+
+    fun fetchNewMusicFromApi(discoverApiResponseItem: DiscoverApiResponse) {
         _showProgressBar.value = true
         viewModelScope.launch {
             val newMusic = async { discoverApiResponseItem.get(3) }
             val newMusicItems = newMusic.await()
             for (newMusicItem in newMusicItems.items) {
-                cacheRepository.saveNeMusic(
+                saveNewMusic(
                     NewMusicEntity(
                         0,
                         newMusicItem.name,
@@ -140,32 +161,32 @@ class DiscoverViewModel @ViewModelInject constructor(
                 "http://"
             )
 
-            cacheRepository.savePlaylist(playlist1)
-            cacheRepository.savePlaylist(playlist2)
+            discoveryRepository.savePlaylist(playlist1)
+            discoveryRepository.savePlaylist(playlist2)
 
         }
     }
 
     fun fetchFeaturedAlbums(): LiveData<List<FeaturedAlbumEntity>> {
-        return cacheRepository.fetchFeatureAlbums()
+        return discoveryRepository.fetchFeatureAlbums()
     }
 
     fun fetchMagicPlaylist(): LiveData<List<MagicPlaylistEntity>> {
-        return cacheRepository.fetchMagicPlaylist()
+        return discoveryRepository.fetchMagicPlaylist()
 
     }
 
     fun fetchTrendingMusic(): LiveData<List<TrendingEntity>> {
-        return cacheRepository.fetchTrendingMusic()
+        return discoveryRepository.fetchTrendingMusic()
     }
 
 
-    fun fetchNewMusic(): LiveData<List<NewMusicEntity>> {
-        return cacheRepository.fetchNewMusic()
+    fun fetchNewMusicFromApi(): LiveData<List<NewMusicEntity>> {
+        return discoveryRepository.fetchNewMusic()
     }
 
     fun fetchPlaylist(): LiveData<List<PlaylistEntity>> {
-        return cacheRepository.fetchPlaylist()
+        return discoveryRepository.fetchPlaylist()
     }
 
 }

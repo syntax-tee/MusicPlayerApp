@@ -1,6 +1,7 @@
 package com.ogunladetaiye.udux.ui.udux_discover.fragments
 
 import android.os.Bundle
+import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.denzcoskun.imageslider.ImageSlider
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.ogunladetaiye.udux.R
+import com.ogunladetaiye.udux.data.cache.firebase.entities.Song
 import com.ogunladetaiye.udux.exoplayer.callbacks.Status
-import com.ogunladetaiye.udux.ui.udux_discover.adapters.PlaylistAdapter
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.MagicPlaylistItem
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.NewMusicItem
 import com.ogunladetaiye.udux.ui.udux_discover.discover_view_sections.TrendingItem
@@ -21,14 +25,15 @@ import com.ogunladetaiye.udux.ui.udux_discover.toMagicPlaylistItem
 import com.ogunladetaiye.udux.ui.udux_discover.toNewMusicItem
 import com.ogunladetaiye.udux.ui.udux_discover.toTrendingListItem
 import com.ogunladetaiye.udux.ui.udux_discover.viewmodels.DiscoverViewModel
-import com.ogunladetaiye.udux.ui.udux_discover.viewmodels.PlaylistViewModel
+import com.ogunladetaiye.udux.ui.udux_discover.viewmodels.MainViewModel
+import com.ogunladetaiye.udux.ui.udux_discover.adapters.SongAdapter
 import com.smarteist.autoimageslider.SliderView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.magic_playlist_recyclerview.*
 import kotlinx.android.synthetic.main.new_music_recyclerview.*
-import kotlinx.android.synthetic.main.playlist_layout_recyclerview.*
+import kotlinx.android.synthetic.main.songlist_layout_recyclerview.*
 import kotlinx.android.synthetic.main.trending_layout_recyclerview.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -44,16 +49,15 @@ class DiscoverFragment : Fragment() {
     lateinit var sliderView: SliderView
     lateinit var sliderAdapter: SliderAdapter
 
-    @Inject
-    lateinit var playlistAdapter: PlaylistAdapter
 
-    private val playlistViewModel: PlaylistViewModel by viewModels()
-    val img1 =
-        "https://static.udux.com/6ed790b59c902ae4c765b295d16f26fbaaaf26cca16ed9a087066c8328b86ca8.jpg"
-    val img2 =
-        "https://static.udux.com/588e1eb09ab05046203fc849e51c94db486170712189929b831d31dd6a1f2573.jpg"
-    val img3 =
-        "https://firebasestorage.googleapis.com/v0/b/static.udux.com/o/https%3A%2Fstatic.udux.com%2F396c817f40f9e9286338a42bb46e3c451807a244d7c1c43be4c544dcf94eebaf.jpg%3Fq%3D9ebf5fb949f5d0b2fd360ec4d4ee05b66f4beeab0e4d58f0a930c1f683ce5447?alt=media&token=da39da19-f4a6-4ca0-9700-a18a19a480ad"
+    private var curPlayingSong: Song? = null
+
+    private var playbackState: PlaybackStateCompat? = null
+
+    private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var songAdapter: SongAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,9 +65,9 @@ class DiscoverFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_discover, container, false)
-        sliderView = view.findViewById(R.id.slider)
+        val imageSlider = view.findViewById<ImageSlider>(R.id.slider)
         GlobalScope.launch(Dispatchers.Main) {
-            displayFeatureSlider(sliderView)
+            displayFeatureSlider(imageSlider)
         }
         return view
     }
@@ -75,28 +79,25 @@ class DiscoverFragment : Fragment() {
             displayMagicPlaylist()
             displayTrendingMusic()
             displayNewMusic()
-            displayPlaylist()
+        }
+
+        setupRecyclerView()
+        subscribeToObservers()
+
+        songAdapter.setItemClickListener {
+            mainViewModel.playOrToggleSong(it)
         }
     }
 
-    fun displayFeatureSlider(sliderView: SliderView) {
+
+    fun displayFeatureSlider(imageSlider: ImageSlider) {
+        val imageList = ArrayList<SlideModel>()
         discoverViewModel.fetchFeaturedAlbums().observe(viewLifecycleOwner, {
             it.forEach {
-                //   sliderDataArrayList.add(SliderData(it.mobileArtwork, it.title, it.subtitle))
+                imageList.add(SlideModel(it.mobileArtwork,it.title +" "+ it.subtitle, ScaleTypes.FIT))
             }
+            imageSlider.setImageList(imageList)
         })
-
-        sliderDataArrayList.add(SliderData(img1, "Olamide", "Badoo"))
-        sliderDataArrayList.add(SliderData(img1, "Davido", "A Good Time"))
-        sliderDataArrayList.add(SliderData(img1, "Wizkid", "Made in Lagos"))
-
-
-        sliderAdapter = SliderAdapter(requireActivity(), sliderDataArrayList)
-        sliderView.autoCycleDirection = SliderView.LAYOUT_DIRECTION_LTR
-        sliderView.setSliderAdapter(sliderAdapter)
-        sliderView.scrollTimeInSec = 3
-        sliderView.isAutoCycle = true
-        sliderView.startAutoCycle()
     }
 
 
@@ -113,7 +114,7 @@ class DiscoverFragment : Fragment() {
     }
 
     fun displayNewMusic() {
-        discoverViewModel.fetchNewMusic().observe(viewLifecycleOwner, Observer {
+        discoverViewModel.fetchNewMusicFromApi().observe(viewLifecycleOwner, Observer {
             initNewMusic(it.toNewMusicItem())
         })
     }
@@ -153,27 +154,18 @@ class DiscoverFragment : Fragment() {
         }
     }
 
-    private fun displayPlaylist() {
-        setupRecyclerView()
-        subscribeToObservers()
-        playlistAdapter.setItemClickListener {
-            playlistViewModel.playOrToggleSong(it)
-        }
-    }
-
-
-    private fun setupRecyclerView() = playlistRecyclerview.apply {
-        adapter = playlistAdapter
+    private fun setupRecyclerView() = rvAllSongs.apply {
+        adapter = songAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun subscribeToObservers() {
-        playlistViewModel.mediaItems.observe(viewLifecycleOwner) { result ->
-            when (result.status) {
+        mainViewModel.mediaItems.observe(viewLifecycleOwner) { result ->
+            when(result.status) {
                 Status.SUCCESS -> {
                     allSongsProgressBar.isVisible = false
-                    result.data?.let { playlist ->
-                        playlistAdapter.playlists = playlist
+                    result.data?.let { songs ->
+                        songAdapter.songs = songs
                     }
                 }
                 Status.ERROR -> Unit
@@ -181,6 +173,7 @@ class DiscoverFragment : Fragment() {
             }
         }
     }
+
 
 
 }

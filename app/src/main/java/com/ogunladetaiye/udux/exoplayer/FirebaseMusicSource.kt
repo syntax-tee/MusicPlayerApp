@@ -10,65 +10,67 @@ import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.ogunladetaiye.udux.data.cache.firebase.MusicDatabase
+import com.ogunladetaiye.udux.exoplayer.State.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FirebaseMusicSource @Inject constructor(
     private val musicDatabase: MusicDatabase
-) {
+){
 
-    private val onReadyListeners = mutableListOf<(Boolean) -> Unit>()
-
-    var playlists = emptyList<MediaMetadataCompat>()
+    var songs = emptyList<MediaMetadataCompat>()
 
     suspend fun fetchMediaData() = withContext(Dispatchers.IO) {
-        state = State.STATE_INITIALIZING
-        val playlists = musicDatabase.getAllPlaylists()
-        playlists.map { playlist ->
-
-            Builder()
-                .putString(METADATA_KEY_ARTIST, playlist.artistName)
-                .putString(METADATA_KEY_MEDIA_ID, playlist.mediaId)
-                .putString(METADATA_KEY_TITLE, playlist.trackTitle)
-                .putString(METADATA_KEY_DISPLAY_TITLE, playlist.trackTitle)
-                .putString(METADATA_KEY_DISPLAY_ICON_URI, playlist.artwork)
-                .putString(METADATA_KEY_MEDIA_URI, playlist.trackUrl)
-                .putString(METADATA_KEY_ALBUM_ART_URI, playlist.artwork)
-                .putString(METADATA_KEY_DISPLAY_SUBTITLE, playlist.trackTitle)
-                .putString(METADATA_KEY_DISPLAY_DESCRIPTION, playlist.trackTitle)
+        state = STATE_INITIALIZING
+        val allSongs = musicDatabase.getAllSongs()
+        songs = allSongs.map { song ->
+            MediaMetadataCompat.Builder()
+                .putString(METADATA_KEY_ARTIST, song.subtitle)
+                .putString(METADATA_KEY_MEDIA_ID, song.mediaId)
+                .putString(METADATA_KEY_TITLE, song.title)
+                .putString(METADATA_KEY_DISPLAY_TITLE, song.title)
+                .putString(METADATA_KEY_DISPLAY_ICON_URI, song.imageUrl)
+                .putString(METADATA_KEY_MEDIA_URI, song.songUrl)
+                .putString(METADATA_KEY_ALBUM_ART_URI, song.imageUrl)
+                .putString(METADATA_KEY_DISPLAY_SUBTITLE, song.subtitle)
+                .putString(METADATA_KEY_DISPLAY_DESCRIPTION, song.subtitle)
                 .build()
         }
-        state = State.STATE_INITIALIZED
+        state = STATE_INITIALIZED
     }
 
     fun asMediaSource(dataSourceFactory: DefaultDataSourceFactory): ConcatenatingMediaSource {
         val concatenatingMediaSource = ConcatenatingMediaSource()
-        playlists.forEach { playlists ->
+        songs.forEach { song ->
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(playlists.getString(METADATA_KEY_MEDIA_URI).toUri())
+                .createMediaSource(song.getString(METADATA_KEY_MEDIA_URI).toUri())
             concatenatingMediaSource.addMediaSource(mediaSource)
         }
         return concatenatingMediaSource
     }
 
-    fun asMediaItems() = playlists.map { playlist ->
+    fun asMediaItems() = songs.map { song ->
         val desc = MediaDescriptionCompat.Builder()
-            .setMediaUri(playlist.getString(METADATA_KEY_MEDIA_URI).toUri())
-            .setTitle(playlist.description.title)
-            .setSubtitle(playlist.description.subtitle)
-            .setMediaId(playlist.description.mediaId)
-            .setIconUri(playlist.description.iconUri)
+            .setMediaUri(song.getString(METADATA_KEY_MEDIA_URI).toUri())
+            .setTitle(song.description.title)
+            .setSubtitle(song.description.subtitle)
+            .setMediaId(song.description.mediaId)
+            .setIconUri(song.description.iconUri)
             .build()
         MediaBrowserCompat.MediaItem(desc, FLAG_PLAYABLE)
     }.toMutableList()
 
-    private var state: State = State.STATE_CREATED
+    private val onReadyListeners = mutableListOf<(Boolean) -> Unit>()
+
+    private var state: State = STATE_CREATED
         set(value) {
-            if (value == State.STATE_INITIALIZED || value == State.STATE_ERROR) {
-                field = value
-                onReadyListeners.forEach { listener ->
-                    listener(state == State.STATE_INITIALIZED)
+            if(value == STATE_INITIALIZED || value == STATE_ERROR) {
+                synchronized(onReadyListeners) {
+                    field = value
+                    onReadyListeners.forEach { listener ->
+                        listener(state == STATE_INITIALIZED)
+                    }
                 }
             } else {
                 field = value
@@ -76,11 +78,11 @@ class FirebaseMusicSource @Inject constructor(
         }
 
     fun whenReady(action: (Boolean) -> Unit): Boolean {
-        if (state == State.STATE_CREATED || state == State.STATE_INITIALIZING) {
+        if(state == STATE_CREATED || state == STATE_INITIALIZING) {
             onReadyListeners += action
             return false
         } else {
-            action(state == State.STATE_INITIALIZED)
+            action(state == STATE_INITIALIZED)
             return true
         }
     }
